@@ -47,6 +47,14 @@ const getBooksId = async (req, res) => {
 const updateBooks = async (req, res) => {
   try {
     const { id } = req.params;
+    const conditions =
+      req.body.title === undefined &&
+      req.body.author === undefined &&
+      req.body.publishYear === undefined;
+
+    if (conditions) {
+      return res.status(400).json({ message: "Book not Updated." });
+    }
 
     const result = await Book.findByIdAndUpdate(id, req.body);
 
@@ -54,7 +62,7 @@ const updateBooks = async (req, res) => {
       return res.status(404).json({ message: "Book Not Found." });
     }
 
-    res.status(201).json({ message: "Book Updated Successfully." });
+    res.status(200).json({ message: "Book Updated Successfully." });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -70,7 +78,7 @@ const deleteBooks = async (req, res) => {
       return res.status(404).json({ message: "Book Not Found." });
     }
 
-    res.status(201).json({ message: "Book Deleted Successfully." });
+    res.status(200).json({ message: "Book Deleted Successfully." });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
